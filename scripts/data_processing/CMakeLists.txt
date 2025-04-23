@@ -26,6 +26,3 @@ target_link_libraries(clear_and_filter ${PCL_LIBRARIES})
 # tile_pointcloud nástroj
 add_executable(tile_pointcloud tile_pointcloud.cpp ${SHARED_SRC})
 target_link_libraries(tile_pointcloud ${PCL_LIBRARIES})
-
-add_executable(compress_pcd_files compress_pcd_files.cpp)
-target_link_libraries(compress_pcd_files ${PCL_LIBRARIES})
