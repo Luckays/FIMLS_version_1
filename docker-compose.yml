@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  pipeline:
+    image: pointcloud-pipeline
+    container_name: pointcloud_runner
+    build: .
+    volumes:
+      - ./data:/app/data  # Upraveno z /data na /app/data
+    command: ["python", "scripts/data_processing/pipeline.py", "--config", "config/parameters_processing.yaml"]
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+      - TZ=Etc/UTC

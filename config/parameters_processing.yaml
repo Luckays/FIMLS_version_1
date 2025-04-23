@@ -1,0 +1,29 @@
+# config/parameters.yaml
+
+data_paths:
+  raw_dir: "/app/data/raw"
+  pcd_dir: "/app/data/pcd"
+  processed_dir: "/app/data/processed"
+  augmented_dir: "/app/data/augmented"
+  tiles_dir: "/app/data/tiles"
+  metadata_dir: "/app/data/metadata"
+
+pipeline_params:
+  do_filtration: true
+  sor_neighbors: 20
+  sor_std_multiplier: 1.0
+  augmentations:
+    random_rotation: true
+    random_scaling: false
+    random_translation: true
+    noise_injection: true
+  tile_size: 20.0
+  tile_overlap: 2
+
+output_params:
+  save_format: "LAZ"
+  compression: true
+
+logging:
+  log_file: "/app/data/logs/pipeline.log"
+  log_level: "INFO"
