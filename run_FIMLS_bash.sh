@@ -15,24 +15,24 @@ SAVE_FORMAT=$(
 )
 echo "🧪 SAVE_FORMAT='$SAVE_FORMAT'"
 
-# 1. Převod LAS → PCD pomocí CloudCompare Dockeru
-echo "🔁 Převádím LAS → PCD pomocí CloudCompare Dockeru..."
-mkdir -p "$PCD_DIR"
+# 1. Převod LAS → PCD pomocí CloudCompare Dockeru - musí se pockat na verzi 2.14
+#echo "🔁 Převádím LAS → PCD pomocí CloudCompare Dockeru..."
+#mkdir -p "$PCD_DIR"
 
-for file in "$RAW_DIR"/*.las; do
-    [ -e "$file" ] || continue
-    fname=$(basename "$file" .las)
-    echo "➡️  $fname.las → $fname.pcd (via CloudCompare)"
+#for file in "$RAW_DIR"/*.las; do
+#    [ -e "$file" ] || continue
+#    fname=$(basename "$file" .las)
+#    echo "➡️  $fname.las → $fname.pcd (via CloudCompare)"
 
-    docker run --rm -v "$(pwd)/data:/data" cloudcompare-cli \
-        -SILENT -AUTO_SAVE OFF \
-        -O "/data/raw/$fname.las" \
-        -C_EXPORT_FMT PCD \
-        -NO_TIMESTAMP \
-        -SAVE_CLOUDS FILE "/data/pcd/$fname.pcd"
-done
+#    docker run --rm -v "$(pwd)/data:/data" cloudcompare-cli \
+#        -SILENT -AUTO_SAVE OFF \
+#        -O "/data/raw/$fname.las" \
+#        -C_EXPORT_FMT PCD_COMPRESSED \ #az verze 2.14 jinak jen PCD
+#        -NO_TIMESTAMP \
+#       -SAVE_CLOUDS FILE "/data/pcd/$fname.pcd"
+#done
 
-echo "✅ Převod LAS → PCD dokončen."
+#echo "✅ Převod LAS → PCD dokončen."
 
 # 2. Spuštění pipeline (čištění, augmentace, dlaždice)
 echo "🚀 Spouštím pipeline v Dockeru..."
