@@ -67,5 +67,3 @@ bool applySORFilter(const std::string& input_file,
     output_filtered = cloud_filtered;
     return true;
 }
-
-}
