@@ -14,6 +14,8 @@ bool applySORFilter(const std::string& input_file,
                     double stddev,
                     pcl::PCLPointCloud2::Ptr& output_filtered)
 {
+    std::cerr << "📥 Loading file: " << input_file << std::endl;
+
     pcl::PCLPointCloud2::Ptr cloud(new pcl::PCLPointCloud2);
     pcl::PCLPointCloud2::Ptr cloud_filtered(new pcl::PCLPointCloud2);
 
@@ -22,17 +24,21 @@ bool applySORFilter(const std::string& input_file,
         return false;
     }
 
-    std::cout << "Loaded " << cloud->width * cloud->height
-              << " points from " << input_file << std::endl;
+    std::cout << "📦 Loaded " << cloud->width * cloud->height
+              << " number of points " << input_file << std::endl;
 
-    std::cout << "Fields: ";
+    std::cout << "📋 Fields: ";
     for (const auto& field : cloud->fields) {
         std::cout << field.name << " ";
     }
     std::cout << std::endl;
 
+    std::cerr << "🔄 Convert PointXYZ..." << std::endl;
     pcl::PointCloud<pcl::PointXYZ>::Ptr xyz_cloud(new pcl::PointCloud<pcl::PointXYZ>);
     pcl::fromPCLPointCloud2(*cloud, *xyz_cloud);
+    std::cerr << "✅ Conversion done: " << xyz_cloud->size() << std::endl;
+
+    std::cerr << "📊 Start of SOR filter: meanK=" << meanK << ", stddev=" << stddev << std::endl;
 
     pcl::StatisticalOutlierRemoval<pcl::PointXYZ> sor;
     sor.setInputCloud(xyz_cloud);
@@ -41,6 +47,7 @@ bool applySORFilter(const std::string& input_file,
 
     pcl::PointIndices::Ptr inliers(new pcl::PointIndices);
     sor.filter(inliers->indices);
+    std::cerr << "✅ Filtred: " << inliers->indices.size() << " inliners" << std::endl;
 
     pcl::ExtractIndices<pcl::PCLPointCloud2> extract;
     extract.setInputCloud(cloud);
@@ -55,10 +62,10 @@ bool applySORFilter(const std::string& input_file,
     }
 
     std::cout << "✅ Saved " << cloud_filtered->width * cloud_filtered->height
-              << " filtered points to " << output_file << " (compressed binary)" << std::endl;
+              << " Number of points " << output_file << " (compressed binary)" << std::endl;
 
-    // ✅ Ulož výstup i do předaného pointeru
     output_filtered = cloud_filtered;
-
     return true;
+}
+
 }
