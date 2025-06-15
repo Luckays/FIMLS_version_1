@@ -3,7 +3,6 @@ version: "3.8"
 services:
   pipeline:
     image: pointcloud-pipeline
-    container_name: pointcloud_runner
     build: .
     volumes:
       - ./data:/app/data  # Upraveno z /data na /app/data
