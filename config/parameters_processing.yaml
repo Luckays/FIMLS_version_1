@@ -21,7 +21,9 @@ pipeline_params:
   tile_overlap: 2
 
 output_params:
-  save_format: "LAZ"
+    save_formats:
+    - "LAZ"
+    - "PLY"
   compression: true
 
 logging:
