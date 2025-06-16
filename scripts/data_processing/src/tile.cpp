@@ -6,6 +6,7 @@
 #include <pcl/conversions.h>
 #include <filesystem>
 #include <sstream>
+#include <fstream>
 #include <iostream>
 
 namespace fs = std::filesystem;
@@ -39,6 +40,14 @@ bool tilePointCloud2(const pcl::PCLPointCloud2::Ptr& cloud,
     fs::create_directories(output_dir);
     pcl::PCDWriter writer;
 
+    std::ostringstream index_filename;
+    index_filename << base_filename << "_tile_index.dat";
+    std::ofstream index_file(output_dir + "/" + index_filename.str());
+    if (!index_file.is_open()) {
+        std::cerr << "❌ Could not create tile index file." << std::endl;
+        return false;
+    }
+
     for (float x = min_x; x < max_x; x += step_x) {
         for (float y = min_y; y < max_y; y += step_y) {
             Eigen::Vector4f min_crop(x, y, min_pt.z, 1.0f);
@@ -55,11 +64,17 @@ bool tilePointCloud2(const pcl::PCLPointCloud2::Ptr& cloud,
             if (tile->width * tile->height == 0) continue;
 
             std::ostringstream filename;
-            filename << base_filename << "_tile_" << tile_id++ << ".pcd";
-            fs::path filepath = fs::path(output_dir) / filename.str();
+            filename << base_filename << "_tile_" << tile_id;
+            fs::path filepath = fs::path(output_dir) / (filename.str() + ".pcd");
 
             writer.writeBinaryCompressed(filepath.string(), *tile);
             std::cout << "✅ Saved tile: " << filepath << " (" << tile->width * tile->height << " points)" << std::endl;
+
+            float center_x = x + tile_size_x / 2.0f;
+            float center_y = y + tile_size_y / 2.0f;
+            index_file << filename.str() << "   " << center_x << "   " << center_y << "\n";
+
+            ++tile_id;
         }
     }
 

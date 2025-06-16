@@ -24,7 +24,7 @@ output_params:
     save_formats:
     - "LAZ"
     - "PLY"
-  compression: true
+compression: true
 
 logging:
   log_file: "/app/data/logs/pipeline.log"
