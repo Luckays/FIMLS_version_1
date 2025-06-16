@@ -22,3 +22,7 @@ set(SHARED_SRC
 # clear_and_filter nástroj
 add_executable(clear_and_filter clear_and_filter.cpp ${SHARED_SRC})
 target_link_libraries(clear_and_filter ${PCL_LIBRARIES})
+
+# tile_pointcloud nástroj
+add_executable(tile_pointcloud tile_pointcloud.cpp ${SHARED_SRC})
+target_link_libraries(tile_pointcloud ${PCL_LIBRARIES})
